@@ -12,12 +12,14 @@ const char* ssid = "wifi_name";
 const char* password = "wifi_pwd";
  
 void setup () {
-  pinMode(detect, INPUT);  
+  pinMode(detect, INPUT); 
+  pinMode(1, OUTPUT);  
   WiFi.begin(ssid, password);
- 
+  digitalWrite(1, LOW);
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
   }
+  digitalWrite(1, HIGH); 
   WiFi.mode(WIFI_STA);
 
 }
