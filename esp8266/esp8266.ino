@@ -21,7 +21,7 @@ void setup () {
   }
   digitalWrite(1, HIGH); 
   WiFi.mode(WIFI_STA);
-
+  WiFi.hostname("esp-water-detector"); 
 }
 
 void loop () {
