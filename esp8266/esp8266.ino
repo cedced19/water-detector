@@ -22,7 +22,11 @@ void setup () {
   digitalWrite(1, HIGH); 
   WiFi.mode(WIFI_STA);
   WiFi.hostname("esp-water-detector"); 
+  WiFi.setAutoReconnect(true);
 }
+
+// Timer
+unsigned long timer = 0;
 
 void loop () {
   if (WiFi.status() == WL_CONNECTED) {
@@ -32,11 +36,20 @@ void loop () {
       http.GET();                                                                 
       http.end(); 
     } else {
-      HTTPClient http;  
-      http.begin("http://192.168.0.40:7770/water-detector-connected"); // URL to request
-      http.GET();                                                                 
-      http.end(); 
+      if(millis() > timer + 300000){
+        HTTPClient http;  
+        http.begin("http://192.168.0.40:7770/water-detector-connected"); // URL to request
+        http.GET();                                                                 
+        http.end();
+        timer = millis();
+      } 
     }
-    delay(300000);
+  } else {
+    digitalWrite(1, LOW);
+    while (WiFi.status() != WL_CONNECTED) {
+      delay(1000);
+    }
+    digitalWrite(1, HIGH); 
   }
+  delay(60000);
 }
